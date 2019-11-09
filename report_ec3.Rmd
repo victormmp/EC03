@@ -1,0 +1,164 @@
+---
+title: 'Estudo de Caso 3: Planejamento e Análise de Experimentos'
+author: "Matheus Marzochi, Mayra Mota, Rafael Ramos e Victor Magalhães"
+date: "11 de Novembro de 2019"
+output:
+  pdf_document:
+    fig_caption: yes
+  html_document:
+    df_print: paged
+---
+
+```{r setup,results='hide',warning=FALSE,echo=FALSE, include=FALSE}
+# A few initial definitions just to make sure all required packages are installed. Change as needed.
+# NOTE: It may echo some weird messages to the PDF on the first compile (package installation messages). Run twice and the problem will (hopefully) go away.
+
+rm(list=ls())
+
+if (!require(ggplot2, quietly = TRUE)){
+      install.packages("ggplot2")
+      }
+if (!require(devtools, quietly = TRUE)){
+      install.packages("devtools")
+      }
+if (!require(broom, quietly = TRUE)){
+       devtools::install_github("dgrtwo/broom")
+ }
+
+if (!require(ExpDE, quietly = TRUE)){
+      install.packages("ExpDE")
+}
+
+if (!require(stats, quietly=TRUE)) {
+      install.packages("stats")
+}
+
+if (!require(boot, quietly=TRUE)) {
+      install.packages("boot")
+}
+
+if (!require(ggpubr, quietly=TRUE)) {
+      install.packages("ggpubr")
+}
+
+# knitr::opts_chunk$set(fig.width=6, fig.height=4) 
+
+if (!require(GGally, quietly = TRUE)){
+      install.packages("GGally")
+}
+
+if (!require(car, quietly = TRUE)){
+      install.packages("car")
+}
+
+if (!require(samplesize, quietly = TRUE)){
+      install.packages("samplesize")
+}
+
+if (!require(pwr, quietly = TRUE)){
+      install.packages("pwr")
+}
+if (!require(simpleboot, quietly = TRUE)){
+  install.packages("simpleboot")
+}
+if (!require(dplyr, quietly = TRUE)){
+  install.packages("dplyr")
+}
+if (!require(effsize, quietly = TRUE)){
+  install.packages("effsize")
+}
+if (!require(smooth, quietly = TRUE)) {
+  install.packages(smooth)
+}
+
+
+library(ExpDE)
+library(ggplot2)
+library(stats)
+library(boot)
+library(ggpubr)
+library(smooth)
+
+
+```
+## Resumo
+
+
+
+## Papéis Desempenhados
+
+A divisão de tarefas no grupo segue a descrição da *Declaração de Políticas de Equipe*. Estando aqui organizada da seguinte forma:
+
+ - Matheus: Verificador
+ - Mayra: Monitora
+ - Rafael: Coordenador
+ - Victor: Revisor
+
+## Planejamento do Experimento
+
+
+
+$$
+\begin{cases}
+  H_0: \mu_{2016/2} - \mu_{2017/2} = 0 \\
+  H_1: \mu_{2016/2} - \mu_{2017/2} \neq 0
+\end{cases}
+$$
+
+
+
+## Coleta dos Dados
+
+
+
+## Análise Exploratória dos Dados
+
+
+
+### Análise dos Dados Experimentais Femininos
+
+#### Teste de Hipótese
+
+### Discussão para Melhoria do Experimento 
+
+
+## Conclusões
+
+
+## Referências
+
+---
+references:
+- id: NyTimes
+  title: How Often Is B.M.I. Misleading? 
+  URL: https://www.nytimes.com/interactive/projects/cp/summer-of-science-2015/latest/how-often-is-bmi-misleading
+  issued:
+    year: 2015
+    
+- id: Science
+  title: The Health Risk of Obesity—Better Metrics Imperative
+  URL: https://science.sciencemag.org/content/341/6148/856.summary
+  issued:
+    year: 2013
+  
+- id: Montgomery2012
+  title: Estatística Aplicada e Probabilidade para Engenheiros
+  author:
+  - family: Montgomery
+    given: Douglas
+  - family: Runger
+    given: George
+  publisher: LTC
+  type: book
+  issued:
+    year: 2012
+    
+- id: Ministerio
+  title: IMC em Adultos
+  author:
+  - family: Ministério da Saúde
+    given: 
+  URL: 'http://portalms.saude.gov.br/component/content/article/804-imc/40509-imc-em-adultos'
+  issued:
+    year: 2017
+---
