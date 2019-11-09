@@ -67,6 +67,8 @@ for (d in dimensions){
     count.dim <- count.dim + 1
 }
 
+write.csv(out_dim.conf1, 'conf_1.csv', row.names=FALSE)
+write.csv(out_dim.conf2, 'conf_2.csv', row.names=FALSE)
 
 
 
