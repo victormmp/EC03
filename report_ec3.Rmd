@@ -67,23 +67,27 @@ if (!require(dplyr, quietly = TRUE)){
 if (!require(effsize, quietly = TRUE)){
   install.packages("effsize")
 }
-if (!require(smooth, quietly = TRUE)) {
-  install.packages(smooth)
+if (!require(smoof, quietly = TRUE)) {
+  install.packages(smoof)
+}
+if (!require(pracma, quietly = TRUE)) {
+  install.packages(pracma)
 }
 
 
-library(ExpDE)
-library(ggplot2)
-library(stats)
-library(boot)
-library(ggpubr)
-library(smooth)
+suppressPackageStartupMessages(library(ExpDE))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(stats))
+suppressPackageStartupMessages(library(boot))
+suppressPackageStartupMessages(library(ggpubr))
+suppressPackageStartupMessages(library(smoof))
+suppressPackageStartupMessages(library(pracma))
 
 
 ```
 ## Resumo
 
-
+O objetivo deste estudo de caso é investigar como modificações de hiperparâmetros de um algoritmo de otimização baseado em eveolução diferencial influenciam em seu desempenho, em diferentes cenários de execução. Os algoritmose serão testados  partir de funções de Rosenbrook, de dimensões entre 2 e 150. 
 
 ## Papéis Desempenhados
 
@@ -97,6 +101,7 @@ A divisão de tarefas no grupo segue a descrição da *Declaração de Política
 ## Planejamento do Experimento
 
 
+### Métricas 
 
 $$
 \begin{cases}
@@ -105,9 +110,83 @@ $$
 \end{cases}
 $$
 
+### Execução do Experimento
+
+Como deseja-se avaliar o desempenho das duas configurações de algoritmos sob diferentes dimensões de problema, serão realizados testes pareados. Cada observação do teste corresponde a uma dimensão do problema de Rosenbrook. Considerando as métricas para o teste estabelecidas anteriormente, o número de instâncias para o teste pareado deverá ser, no  mínimo, 34 amostras, como o cálculo a seguir demonstra.
+
+```{r num_amostras, echo=TRUE}
+result <- power.t.test(delta=0.5,
+             sig.level=0.05,
+             power=0.8,
+             type='paired',
+             alternative='two.sided')
+print(result)
+```
+
 
 
 ## Coleta dos Dados
+
+```{r coleta_dados, echo=TRUE, eval=FALSE}
+n_instancias <- 34
+
+dimensions <- linspace(2, 150, n_instancias)
+
+out_dim.conf1 = data.frame(matrix(ncol = 2, nrow = 0))
+colnames(out_dim.conf1) <- c("dim", "best")
+out_dim.conf2 = data.frame(matrix(ncol = 2, nrow = 0))
+colnames(out_dim.conf2) <- c("dim", "best")
+
+count.dim <- 1
+for (d in dimensions){
+
+    dim <- ceil(d)
+
+    cat("\nBuilding dimension ", dim)
+
+    fn <- function(X){
+        if(!is.matrix(X)) X <- matrix(X, nrow = 1) # <- if a single vector is passed as X
+        Y <- apply(X, MARGIN = 1,
+                   FUN = smoof::makeRosenbrockFunction(dimensions = dim))
+        return(Y)
+    }
+    selpars <- list(name = "selection_standard")
+    stopcrit <- list(names = "stop_maxeval", maxevals = 5000 * dim, maxiter = 100 * dim)
+    probpars <- list(name = "fn", xmin = rep(-5, dim), xmax = rep(10, dim))
+    popsize = 5 * dim
+
+    ## Config 1
+    recpars1 <- list(name = "recombination_arith")
+    mutpars1 <- list(name = "mutation_rand", f = 4)
+    ## Config 2
+    recpars2 <- list(name = "recombination_bin", cr = 0.7)
+    mutpars2 <- list(name = "mutation_best", f = 3)
+
+    out <- ExpDE(mutpars = mutpars1,
+                 recpars = recpars1,
+                 popsize = popsize,
+                 selpars = selpars,
+                 stopcrit = stopcrit,
+                 probpars = probpars,
+                 showpars = list(show.iters = "dots", showevery = 20))
+    de <- list("dim"=dim, "best"=out$Fbest)
+    out_dim.conf1 <- rbind(out_dim.conf1,de, stringsAsFactors=FALSE)
+
+    out <- ExpDE(mutpars = mutpars2,
+                 recpars = recpars2,
+                 popsize = popsize,
+                 selpars = selpars,
+                 stopcrit = stopcrit,
+                 probpars = probpars,
+                 showpars = list(show.iters = "dots", showevery = 20))
+    de <- list("dim"=dim, "best"=out$Fbest)
+    out_dim.conf2 <- rbind(out_dim.conf1,de, stringsAsFactors=FALSE)
+
+    count.dim <- count.dim + 1
+}
+}
+```
+
 
 
 
