@@ -10,7 +10,7 @@ library(pracma)
 #              type='paired',
 #              alternative='two.sided')
 
-n_instancias <- 34
+n_instancias <- 50
 
 dimensions <- linspace(2, 150, n_instancias)
 
@@ -67,8 +67,8 @@ for (d in dimensions){
     count.dim <- count.dim + 1
 }
 
-write.csv(out_dim.conf1, 'conf_1.csv', row.names=FALSE)
-write.csv(out_dim.conf2, 'conf_2.csv', row.names=FALSE)
+write.csv(out_dim.conf1, 'conf_50_1.csv', row.names=FALSE)
+write.csv(out_dim.conf2, 'conf_50_2.csv', row.names=FALSE)
 
 
 
