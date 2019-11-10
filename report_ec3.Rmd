@@ -83,7 +83,6 @@ suppressPackageStartupMessages(library(ggpubr))
 suppressPackageStartupMessages(library(smoof))
 suppressPackageStartupMessages(library(pracma))
 
-
 ```
 ## Resumo
 
@@ -101,14 +100,45 @@ A divisão de tarefas no grupo segue a descrição da *Declaração de Política
 ## Planejamento do Experimento
 
 
-### Métricas 
+### Descrição do Problema
+
+O problema analisado tem por objetivo comparar o desempenho de duas configurações de um algoritmo de de otimização baseada em evolução diferencial, na resolução do problema de ótimo em funções de Rosenbrook. As funções podem possuir dimensões que variam entre 2 e 150. A hipótese nula é a de que o desempenho dos dois algoritmos permanece a mesma independente da configuração, e a hipótese que está sendo testada é a de que existe uma diferenção de desempenho entre elas.
+
+Para avaliar o desempenho de cada um dos algoritmos, seus desempenhos sob diferentes dimensões da função de Rosenbrook são levados em consideração, a partir de testes pareados. Testes pareados constituem uma parte de testes blocados, onde distribuições são comparadas caso a caso, agrupadas em blocos, com o objetivo de diminuir efeitos que não estejam relacionados com os parâmetros em teste. O valor de performance $y$ para cara algoritmo $i$ em cada instância $j$ é dado a partir da fórmula:
 
 $$
-\begin{cases}
-  H_0: \mu_{2016/2} - \mu_{2017/2} = 0 \\
-  H_1: \mu_{2016/2} - \mu_{2017/2} \neq 0
-\end{cases}
+y_{ij} = \mu + \tau_i + \beta_j + \epsilon_{ij}
 $$
+
+onde $\mu$ corresponde à média geral de todas as amostras, $\tau_i$ corresponde o efeito do i-ésimo algoritmo, $\beta_j$ representa , e $\epsilon_{ij}$ representa um erro randômico com média nula e independentemente distribuídos, de variância $\sigma^2$. 
+
+O que queremos testar é a equivalência dos parâmetros sob teste para cada algoritmo, ou seja, $y_i$. Seja $y_i$ definido como:
+
+$$
+  y_i = \sum^{n}_{j = 1} y_{ij} \\
+  \overline{y_i} = \frac{y_i}{n}
+$$
+
+onde $n$ equivale ao total de instâncias (blocos). A hipótese nula é:
+
+$$
+H_0: y_1 = y_2 = ... = y_a
+$$
+
+onde a equivale ao total de algoritmos sendo comparados, o que no problema em questão são 2. Como o que difere cada parâmetro $y_i$ é o valor da influência do algoritmo i, dizer que a hipótese nula é que os parâmetros $y_i$ são iguais equivale a deizer que 
+
+$$
+H_0: \tau_1 = \tau_2 = ... = \tau_a = 0
+$$
+
+o que indica não haver influência do algoritmo nos parâmetros das execuções, e a definição do mesmo passa a ser portanto apenas a média global acrescida de um erro $\epsilon_{ij}$. Isto equivale a dizer que todas as observações foram retiradas de uma distribuição normal com média $\mu$ e variância $\sigma^2$. A hipótese em teste, é:
+
+$$
+H_1: \tau_i = 0 
+$$
+
+para pelo menos algum valor de i.
+
 
 ### Execução do Experimento
 
@@ -184,7 +214,9 @@ for (d in dimensions){
 
     count.dim <- count.dim + 1
 }
-}
+
+write.csv(out_dim.conf1, 'conf_1.csv', row.names=FALSE)
+write.csv(out_dim.conf2, 'conf_2.csv', row.names=FALSE)
 ```
 
 
