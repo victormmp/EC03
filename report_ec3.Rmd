@@ -87,7 +87,7 @@ suppressPackageStartupMessages(library(CAISEr))
 ```
 ## Resumo
 
-O objetivo deste estudo de caso é investigar como modificações de hiperparâmetros de um algoritmo de otimização baseado em evolução diferencial influenciam em seu desempenho, em diferentes cenários de execução. Os algoritmose serão testados  partir de funções de Rosenbrook, de dimensões entre 2 e 150. 
+O objetivo deste estudo de caso é investigar como modificações de hiperparâmetros de um algoritmo de otimização baseado em evolução diferencial influenciam em seu desempenho, em diferentes cenários de execução. Os algoritmose serão testados  partir de funções de Rosenbrock, de dimensões entre 2 e 150. 
 
 ## Papéis Desempenhados
 
