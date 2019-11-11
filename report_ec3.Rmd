@@ -176,7 +176,7 @@ O que nos indica o uso de, no mínimo, 45 instâncias. A partir de uma rotina de
 ```{r coleta_dados, echo=TRUE, eval=FALSE}
 n_instancias <- 45
 
-dimensions <- sample(2, 150, n_instancias)
+dimensions <- sample(seq(2, 150), n_instancias)
 
 out_dim.conf1 = data.frame(matrix(ncol = 2, nrow = 0))
 colnames(out_dim.conf1) <- c("dim", "best")
