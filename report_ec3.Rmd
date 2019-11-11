@@ -126,7 +126,7 @@ $$
 H_0: y_1 = y_2 = ... = y_a
 $$
 
-onde a equivale ao total de algoritmos sendo comparados, o que no problema em questão são 2. Como o que difere cada parâmetro $y_i$ é o valor da influência do algoritmo i, dizer que a hipótese nula é que os parâmetros $y_i$ são iguais equivale a deizer que 
+onde a equivale ao total de algoritmos sendo comparados, o que no problema em questão são 2. Como o que difere cada parâmetro $y_i$ é o valor da influência do algoritmo i, dizer que a hipótese nula é que os parâmetros $y_i$ são iguais equivale a dizer que 
 
 $$
 H_0: \tau_1 = \tau_2 = ... = \tau_a = 0
@@ -163,7 +163,7 @@ print(result)
 
 ## Coleta dos Dados
 
-Como, a princípio, não podemos assumir normalidade dos dados coletados, para saber a quantidade de instâncias a ser utilizada, fizemos o cálculo considerando o uso do teste de Wilcoxon, utilizando a função `calc_instances` [@Campelo].
+Como, a princípio, não podemos assumir normalidade dos dados coletados, para saber a quantidade de instâncias a ser utilizada, fizemos o cálculo considerando o uso do teste de Wilcoxon [@Wilcox], utilizando a função `calc_instances` [@Campelo].
 
 ```{r numero_de_instancias, eval=T, echo=T}
 Ncalc <- calc_instances(
@@ -315,11 +315,12 @@ O boxplot para as diferenças, como pode ser visto a seguir, mostra que existe u
 boxplot(difs)
 ```
 
-Como visto, não se consegue negar a hipótese nula de que os dados vieram de uma distribuição normal, o que indica grande possibilidade de que os dados sejam normais. Pode-se, portanto, realizar um teste pareado com as médias dos dados obtidos a cada instância, usando teste t-student.
+### Teste de Hipótese
+
+Como visto, não se consegue negar a hipótese nula de que os dados vieram de uma distribuição normal, o que indica grande possibilidade de que os dados sejam normais. Pode-se, portanto, realizar um teste pareado com as médias dos dados obtidos a cada instância, usando teste de Wilcoxon [@Wilcox].
 
 ```{r teste_t, echo=T, eval=T}
-result <- wilcox.test(difs, alternative='two.sided', conf.level=0.95)
-
+result <- wilcox.test(difs, alternative='two.sided', conf.level=0.95, conf.int=T)
 print(result)
 ```
 
@@ -327,8 +328,7 @@ Os resultados obtidos pelo teste, portanto, foram:
 
   - Graus de Liberdade = 44
   - p-valor = 5.684 e-14
-
-#### Teste de Hipótese
+  - Intervalo de confiança = -5993713 a -3620723
 
 ### Discussão para Melhoria do Experimento 
 
@@ -361,4 +361,14 @@ references:
   type: book
   issued:
     year: 2012
+
+- id: Wilcox
+  title: Concepts & Applications of Inferential Statistics
+  author:
+  - family: Lowry
+    given: Richard
+  publisher: 
+  type: book
+  issued:
+    year: 2008
 ---
