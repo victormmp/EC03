@@ -3,6 +3,7 @@ rm(list=ls())
 library(ExpDE)
 library(smoof)
 library(pracma)
+library(dplyr)
 
 # result <- power.t.test(delta=0.5,
 #              sig.level=0.05,
@@ -75,6 +76,48 @@ for (d in dimensions){
 write.csv(out_dim.conf1, 'conf_45_1.csv', row.names=FALSE)
 write.csv(out_dim.conf2, 'conf_45_2.csv', row.names=FALSE)
 
+norm <- function(x) {
+    result <- shapiro.test(x)
+    return (result$p-value)
+}
 
+conf_1 <- read.csv(file='conf_45_1_Matheus.csv', sep=',')
+conf_2<- read.csv(file='conf_45_2_Matheus.csv', sep=',')
 
+dataConf1 <- matrix(as.numeric(unlist(conf_1[,2])),nrow=nrow(conf_1))
+dataConf2 <- matrix(as.numeric(unlist(conf_2[,2])),nrow=nrow(conf_2))
+
+conf_1 <- read.csv(file='conf_45_1_Victor.csv', sep=',')
+conf_2<- read.csv(file='conf_45_2_Victor.csv', sep=',')
+
+dataConf1V <- matrix(as.numeric(unlist(conf_1[,2])),nrow=nrow(conf_1))
+dataConf2V <- matrix(as.numeric(unlist(conf_2[,2])),nrow=nrow(conf_2))
+
+dataConf1 <- cbind(dataConf1, dataConf1V)
+dataConf2 <- cbind(dataConf2, dataConf2V)
+
+for (i  in seq(11, nrow(dataConf1), 10)) {
+
+    samples1 <- as.vector(dataConf1[i:(i+9),])
+    samples2 <- as.vector(dataConf2[i:(i+9),])
+    samples <- mean(samples1) - mean(samples2)
+    result <- shapiro.test(samples)$p.value
+
+    if (result < 0.05) {
+        print(paste('Amostra', i,'com p-valor', result))
+    }
+}
+
+difs <- c()
+all_conf_1 <- c()
+all_conf_2 <- c()
+for (i  in seq(1, nrow(dataConf1), 10)) {
+
+    samples1 <- as.vector(dataConf1[i:(i+9),])
+    samples2 <- as.vector(dataConf2[i:(i+9),])
+    all_conf_1 <- c(all_conf_1, mean(samples1))
+    all_conf_2 <- c(all_conf_2, mean(samples2))
+    dif <- mean(samples1) - mean(samples2)
+    difs <- c(difs, dif)
+}
 

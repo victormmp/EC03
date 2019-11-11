@@ -82,6 +82,7 @@ suppressPackageStartupMessages(library(boot))
 suppressPackageStartupMessages(library(ggpubr))
 suppressPackageStartupMessages(library(smoof))
 suppressPackageStartupMessages(library(pracma))
+suppressPackageStartupMessages(library(CAISEr))
 
 ```
 ## Resumo
@@ -139,6 +140,8 @@ $$
 
 para pelo menos algum valor de i.
 
+Para este trabalho, deseja-se saber se existe alguma diferença no desempenho médio do algoritmo quando carregado com diferentes configurações. O parâmetro utilizado foi baseado na diferença do desempenho médio das configurações 1 e 2, por tratar-se de uma análise pareada.  Se as duas configurações apresentarem o mesmo desempenho, a diferença das médias de cada população amostrada será zero. Se uma configuração tiver o desempenho superior, o valor não será nulo. Desta forma, sendo \mu= \mu_1 - \mu_2, o teste deve possuir as seguintes hipóteses:
+$$\begin{cases} H_0: \mu= 0 & \\ H_1: \mu\neq 0 \end{cases}$$
 
 ### Execução do Experimento
 
@@ -246,14 +249,77 @@ Ao final, temos um conjunto com 45 instâncias correspondentes a ordens do algor
 
 Avaliando as amostras contidas em cada instância, uma análise de normalidade foi realizada:
 
-```{r teste_normalidade, eval=TRUE, echo=T}
+```{r teste_normalidade, eval=F, echo=T}
+
+conf_1 <- read.csv(file='conf_1.csv', sep=',')
+conf_2<- read.csv(file='conf_2.csv', sep=',')
+
+dataConf1 <- matrix(as.numeric(unlist(conf_1[,2])),nrow=nrow(conf_1))
+dataConf2 <- matrix(as.numeric(unlist(conf_2[,2])),nrow=nrow(conf_2))
+
+difs <- c()
+all_conf_1 <- c()
+all_conf_2 <- c()
+for (i  in seq(1, nrow(dataConf1), 10)) {
+    
+    samples1 <- as.vector(dataConf1[i:(i+9),])
+    samples2 <- as.vector(dataConf2[i:(i+9),])
+    all_conf_1 <- c(all_conf_1, mean(samples1))
+    all_conf_2 <- c(all_conf_2, mean(samples2))
+    dif <- mean(samples1) - mean(samples2)
+    difs <- c(difs, dif)
+}
+```
+
+```{r teste_real, echo=F, eval=T}
+conf_1 <- read.csv(file='conf_45_1_Matheus.csv', sep=',')
+conf_2<- read.csv(file='conf_45_2_Matheus.csv', sep=',')
+
+dataConf1 <- matrix(as.numeric(unlist(conf_1[,2])),nrow=nrow(conf_1))
+dataConf2 <- matrix(as.numeric(unlist(conf_2[,2])),nrow=nrow(conf_2))
+
+conf_1 <- read.csv(file='conf_45_1_Victor.csv', sep=',')
+conf_2<- read.csv(file='conf_45_2_Victor.csv', sep=',')
+
+dataConf1V <- matrix(as.numeric(unlist(conf_1[,2])),nrow=nrow(conf_1))
+dataConf2V <- matrix(as.numeric(unlist(conf_2[,2])),nrow=nrow(conf_2))
+
+dataConf1 <- cbind(dataConf1, dataConf1V)
+dataConf2 <- cbind(dataConf2, dataConf2V)
+
+difs <- c()
+all_conf_1 <- c()
+all_conf_2 <- c()
+for (i  in seq(1, nrow(dataConf1), 10)) {
+
+    samples1 <- as.vector(dataConf1[i:(i+9),])
+    samples2 <- as.vector(dataConf2[i:(i+9),])
+    all_conf_1 <- c(all_conf_1, mean(samples1))
+    all_conf_2 <- c(all_conf_2, mean(samples2))
+    dif <- mean(samples1) - mean(samples2)
+    difs <- c(difs, dif)
+}
+
+shapiro.test(difs)
 
 ```
+
+De acordo com o teste de Shapiro-Wilk, o p-valor para a diferença foi de $0.006$, abaixo da incerteza de 0.05, o que é um indício de que a distribuição dos dados não é normal. 
+
+O boxplot para as diferenças, como pode ser visto a seguir, mostra que existe uma assimetria nos dados, o que corrobora com a hipótese de não-normalidade.
+
+```{r boxplot, echo=F, fig=T, fig.align='center', fig.cap='Box plot para as diferenças das médias.'}
+boxplot(difs)
+```
+
+
+
+
 
 Como visto, não se consegue negar a hipótese nula de que os dados vieram de uma distribuição normal, o que indica grande possibilidade de que os dados sejam normais. Pode-se, portanto, realizar um teste pareado com as médias dos dados obtidos a cada instância, usando teste t-student.
 
 ```{r teste_t, echo=T, eval=T}
-result <- t.test(conf_1, conf_2, paired=TRUE, alternative='two.sided', conf.level=0.95)
+result <- wilcox.test(difs, alternative='two.sided', conf.level=0.95)
 
 print(result)
 ```

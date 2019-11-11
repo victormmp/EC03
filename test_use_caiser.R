@@ -9,3 +9,5 @@ Ncalc <- calc_instances(
     ncomparisons=1
 )
 Ncalc$ninstances
+
+
