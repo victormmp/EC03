@@ -140,8 +140,11 @@ $$
 
 para pelo menos algum valor de i.
 
-Para este trabalho, deseja-se saber se existe alguma diferença no desempenho médio do algoritmo quando carregado com diferentes configurações. O parâmetro utilizado foi baseado na diferença do desempenho médio das configurações 1 e 2, por tratar-se de uma análise pareada.  Se as duas configurações apresentarem o mesmo desempenho, a diferença das médias de cada população amostrada será zero. Se uma configuração tiver o desempenho superior, o valor não será nulo. Desta forma, sendo \mu= \mu_1 - \mu_2, o teste deve possuir as seguintes hipóteses:
-$$\begin{cases} H_0: \mu= 0 & \\ H_1: \mu\neq 0 \end{cases}$$
+Para este trabalho, deseja-se saber se existe alguma diferença no desempenho médio do algoritmo quando carregado com diferentes configurações. O parâmetro utilizado foi baseado na diferença do desempenho médio das configurações 1 e 2, por tratar-se de uma análise pareada.  Se as duas configurações apresentarem o mesmo desempenho, a diferença das médias de cada população amostrada será zero. Se uma configuração tiver o desempenho superior, o valor não será nulo. Desta forma, sendo $\mu= \mu_1 - \mu_2$, o teste deve possuir as seguintes hipóteses:
+$$
+\begin{cases} H_0: \mu= 0 & \\ 
+H_1: \mu\neq 0 \end{cases}
+$$
 
 ### Execução do Experimento
 
@@ -197,13 +200,13 @@ for (d in dimensions){
         cat("\nBuilding dimension ", dim)
     
         fn <- function(X){
-            if(!is.matrix(X)) X <- matrix(X, nrow = 1) # <- if a single vector is passed as X
+            if(!is.matrix(X)) X <- matrix(X, nrow = 1) 
             Y <- apply(X, MARGIN = 1,
                        FUN = smoof::makeRosenbrockFunction(dimensions = dim))
             return(Y)
         }
         selpars <- list(name = "selection_standard")
-        stopcrit <- list(names = "stop_maxeval", maxevals = 5000 * dim, maxiter = 100 * dim)
+        stopcrit <- list(names = "stop_maxeval", maxevals = 5000*dim, maxiter = 100*dim)
         probpars <- list(name = "fn", xmin = rep(-5, dim), xmax = rep(10, dim))
         popsize = 5 * dim
     
@@ -326,13 +329,8 @@ print(result)
 
 Os resultados obtidos pelo teste, portanto, foram:
 
- - t = 
- - Graus de Liberdade = 44
- - p-valor = 
- - Intervalo de confiança de 95% = 
-
-
-### Análise dos Dados Experimentais Femininos
+  - Graus de Liberdade = 44
+  - p-valor = 5.684 e-14
 
 #### Teste de Hipótese
 
