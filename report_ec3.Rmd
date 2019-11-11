@@ -86,7 +86,7 @@ suppressPackageStartupMessages(library(pracma))
 ```
 ## Resumo
 
-O objetivo deste estudo de caso é investigar como modificações de hiperparâmetros de um algoritmo de otimização baseado em eveolução diferencial influenciam em seu desempenho, em diferentes cenários de execução. Os algoritmose serão testados  partir de funções de Rosenbrook, de dimensões entre 2 e 150. 
+O objetivo deste estudo de caso é investigar como modificações de hiperparâmetros de um algoritmo de otimização baseado em evolução diferencial influenciam em seu desempenho, em diferentes cenários de execução. Os algoritmose serão testados  partir de funções de Rosenbrook, de dimensões entre 2 e 150. 
 
 ## Papéis Desempenhados
 
@@ -102,7 +102,7 @@ A divisão de tarefas no grupo segue a descrição da *Declaração de Política
 
 ### Descrição do Problema
 
-O problema analisado tem por objetivo comparar o desempenho de duas configurações de um algoritmo de de otimização baseada em evolução diferencial, na resolução do problema de ótimo em funções de Rosenbrook. As funções podem possuir dimensões que variam entre 2 e 150. A hipótese nula é a de que o desempenho dos dois algoritmos permanece a mesma independente da configuração, e a hipótese que está sendo testada é a de que existe uma diferenção de desempenho entre elas.
+O problema analisado tem por objetivo comparar o desempenho de duas configurações de um algoritmo de otimização baseada em evolução diferencial, na resolução do problema de ótimo em funções de Rosenbrook. As funções podem possuir dimensões que variam entre 2 e 150. A hipótese nula é a de que o desempenho dos dois algoritmos permanece o mesma independente da configuração, e a hipótese que está sendo testada é a de que existe uma diferenção de desempenho entre elas.
 
 Para avaliar o desempenho de cada um dos algoritmos, seus desempenhos sob diferentes dimensões da função de Rosenbrook são levados em consideração, a partir de testes pareados. Testes pareados constituem uma parte de testes blocados, onde distribuições são comparadas caso a caso, agrupadas em blocos, com o objetivo de diminuir efeitos que não estejam relacionados com os parâmetros em teste. O valor de performance $y$ para cara algoritmo $i$ em cada instância $j$ é dado a partir da fórmula:
 
@@ -171,12 +171,12 @@ Ncalc <- calc_instances(
 print(Ncalc$ninstances)
 ```
 
-O que nos indica o uso de, no mínimo, 45 instâncias. A partir de uma rotina de coleta, geramos csvs com os resultados das execuções dos algoritmos.
+O que nos indica o uso de, no mínimo, 45 instâncias. A partir de uma rotina de coleta, geramos arquivos csv com os resultados das execuções dos algoritmos.
 
 ```{r coleta_dados, echo=TRUE, eval=FALSE}
 n_instancias <- 45
 
-dimensions <- linspace(2, 150, n_instancias)
+dimensions <- sample(2, 150, n_instancias)
 
 out_dim.conf1 = data.frame(matrix(ncol = 2, nrow = 0))
 colnames(out_dim.conf1) <- c("dim", "best")
@@ -253,8 +253,11 @@ Avaliando as amostras contidas em cada instância, uma análise de normalidade f
 Como visto, não se consegue negar a hipótese nula de que os dados vieram de uma distribuição normal, o que indica grande possibilidade de que os dados sejam normais. Pode-se, portanto, realizar um teste pareado com as médias dos dados obtidos a cada instância, usando teste t-student.
 
 ```{r teste_t, echo=T, eval=T}
+result <- t.test(conf_1, conf_2, paired=TRUE, alternative='two.sided', conf.level=0.95)
 
+print(result)
 ```
+
 
 
 
