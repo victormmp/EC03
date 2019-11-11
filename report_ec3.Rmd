@@ -236,8 +236,8 @@ for (d in dimensions){
     count.dim <- count.dim + 1
 }
 
-write.csv(out_dim.conf1, 'conf_45_1.csv', row.names=FALSE)
-write.csv(out_dim.conf2, 'conf_45_2.csv', row.names=FALSE)
+write.csv(out_dim.conf1, 'conf_1.csv', row.names=FALSE)
+write.csv(out_dim.conf2, 'conf_2.csv', row.names=FALSE)
 ```
 
 Ao final, temos um conjunto com 45 instâncias correspondentes a ordens do algoritmo de Rosenbrook, com 30 amostras em cada um.
