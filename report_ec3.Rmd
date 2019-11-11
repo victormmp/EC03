@@ -258,7 +258,12 @@ result <- t.test(conf_1, conf_2, paired=TRUE, alternative='two.sided', conf.leve
 print(result)
 ```
 
+Os resultados obtidos pelo teste, portanto, foram:
 
+ - t = 
+ - Graus de Liberdade = 44
+ - p-valor = 
+ - Intervalo de confiança de 95% = 
 
 
 ### Análise dos Dados Experimentais Femininos
