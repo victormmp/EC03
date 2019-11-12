@@ -307,11 +307,24 @@ result <- wilcox.test(difs, alternative='two.sided', conf.level=0.95, conf.int=T
 print(result)
 ```
 
+
+### Estimação do tamanho de efeito e intervalo de confiança
+
+O intervalo de confiança (intervalo com probabilidade de 95% de conter o valor verdadeiro do parâmetro da população), por sua vez, foi obtido diretamente do teste de Wilcoxon. Os resultados obtidos pelo teste foram:
+
+  - Graus de Liberdade = 44
+  - p-valor = 5.684 e-14
+  - Intervalo de confiança = -5993713 a -3620723
+  
+O cálculo do tamanho de efeito é calculado de acordo com o trecho de código abaixo:
+
 ```{r eff_size, eval=T, echo=T}
 z<- qnorm(result$p.value/2)
 eff <- z/sqrt(45)
 print(paste('Effect Size', eff))
 ```
+
+O tamanho de efeito obtido foi -1.12. Esse  valor indica uma perfeita correlação negativa entre as duas configurações do algoritmo, significando que a diferença entre os dois grupos é maior do que um desvio padrão. Pode-se entender que quanto maior o tamanho do efeito, maior é o impacto que a variável central do experimento está causando e mais importante se torna o fato dela ter uma contribuição para a questão analisada [@Lindenau].
 
 Compilando o teste de hipótese de Wilcoxon obtemos os seguintes resultados:
 
@@ -329,10 +342,12 @@ durbinWatsonTest(as.vector(conf_1-conf_2))
 
 
 ### Discussão para Melhoria do Experimento 
+Para uma melhoria de resultados, propõe-se o uso da herística citada em [@Campelo]. Porém esse método exigiria uma custo computacional muito alto, mostrando-se inviável para o equipamento utilizado para geração dos dados analisados no presente relátorio. 
 
 
 ## Conclusões
 
+A principal conclusão que podemos tirar a respeito deste teste é que a configuração 1 possui melhor desempenho que a configuração 2, vista no boxplot anteriormente, uma vez que a distribuição dos dados entre a diferença das médias(Configuração2-Configuração1) é negativa. Tal conclusão apresentou uma confiança de 95%. 
 
 ## Referências
 
@@ -347,6 +362,18 @@ references:
   title: Sample size estimation for power and accuracy in the experimental comparison of algorithms
   issued:
     year: 2018
+    
+- id: Lindenau
+  author: 
+  - family: Lindenau
+    given: Luciano Santos Pinto
+  - family: Guimarães
+    given: Juliana Dal-Ri
+  title: Calculando O Tamanho de Efeito No Spss. 
+  publisher: Clinical & Biomedical Research 32
+  type: article-journal
+  issued:
+    year: 2012
   
 - id: Montgomery2012
   title: Estatística Aplicada e Probabilidade para Engenheiros
