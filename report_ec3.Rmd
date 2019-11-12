@@ -185,11 +185,13 @@ n_instancias <- 45
 dimensions <- sample(seq(2, 150), n_instancias)
 
 out_dim.conf1 = data.frame(matrix(ncol = 2, nrow = 0))
-colnames(out_dim.conf1) <- c("dim", "best")
+colnames(out_dim.conf1) <- c("best")
 out_dim.conf2 = data.frame(matrix(ncol = 2, nrow = 0))
-colnames(out_dim.conf2) <- c("dim", "best")
+colnames(out_dim.conf2) <- c("best")
 
 count.dim <- 1
+out_1 <- c()
+out_2 <- c()
 for (d in dimensions){
 
     dim <- ceil(d)
@@ -217,27 +219,27 @@ for (d in dimensions){
         recpars2 <- list(name = "recombination_bin", cr = 0.7)
         mutpars2 <- list(name = "mutation_best", f = 3)
     
-        out <- ExpDE(mutpars = mutpars1,
+        out_1 <- c(out_1, ExpDE(mutpars = mutpars1,
                      recpars = recpars1,
                      popsize = popsize,
                      selpars = selpars,
                      stopcrit = stopcrit,
                      probpars = probpars,
-                     showpars = list(show.iters = "dots", showevery = 20))
-        de <- list("dim"=dim, "best"=out$Fbest, "repetition"=r)
-        out_dim.conf1 <- rbind(out_dim.conf1,de, stringsAsFactors=FALSE)
+                     showpars = list(show.iters = "dots", showevery = 20))$Fbest)
     
-        out <- ExpDE(mutpars = mutpars2,
+        out_2 <- c(out_2, ExpDE(mutpars = mutpars2,
                      recpars = recpars2,
                      popsize = popsize,
                      selpars = selpars,
                      stopcrit = stopcrit,
                      probpars = probpars,
-                     showpars = list(show.iters = "dots", showevery = 20))
-        de <- list("dim"=dim, "best"=out$Fbest, "repetition"=r)
-        out_dim.conf2 <- rbind(out_dim.conf2,de, stringsAsFactors=FALSE)
+                     showpars = list(show.iters = "dots", showevery = 20))$Fbest)
     
     }
+    de <- list("best"=mean(out_1),)
+    out_dim.conf1 <- rbind(out_dim.conf1,de, stringsAsFactors=FALSE)
+    de <- list("best"=mean(out_2))
+    out_dim.conf2 <- rbind(out_dim.conf2,de, stringsAsFactors=FALSE)
 
     count.dim <- count.dim + 1
 }
@@ -275,33 +277,14 @@ for (i  in seq(1, nrow(dataConf1), 10)) {
 ```
 
 ```{r teste_real, echo=F, eval=T}
-conf_1 <- read.csv(file='conf_45_1_Matheus.csv', sep=',')
-conf_2<- read.csv(file='conf_45_2_Matheus.csv', sep=',')
+conf_1 <- read.csv(file='conf_1.csv', sep=',')
+conf_2<- read.csv(file='conf_2.csv', sep=',')
 
-dataConf1 <- matrix(as.numeric(unlist(conf_1[,2])),nrow=nrow(conf_1))
-dataConf2 <- matrix(as.numeric(unlist(conf_2[,2])),nrow=nrow(conf_2))
+conf_1 <- matrix(as.numeric(unlist(conf_1[,1])),nrow=nrow(conf_1))
+conf_2 <- matrix(as.numeric(unlist(conf_2[,1])),nrow=nrow(conf_2))
 
-conf_1 <- read.csv(file='conf_45_1_Victor.csv', sep=',')
-conf_2<- read.csv(file='conf_45_2_Victor.csv', sep=',')
 
-dataConf1V <- matrix(as.numeric(unlist(conf_1[,2])),nrow=nrow(conf_1))
-dataConf2V <- matrix(as.numeric(unlist(conf_2[,2])),nrow=nrow(conf_2))
-
-dataConf1 <- cbind(dataConf1, dataConf1V)
-dataConf2 <- cbind(dataConf2, dataConf2V)
-
-difs <- c()
-all_conf_1 <- c()
-all_conf_2 <- c()
-for (i  in seq(1, nrow(dataConf1), 10)) {
-
-    samples1 <- as.vector(dataConf1[i:(i+9),])
-    samples2 <- as.vector(dataConf2[i:(i+9),])
-    all_conf_1 <- c(all_conf_1, mean(samples1))
-    all_conf_2 <- c(all_conf_2, mean(samples2))
-    dif <- mean(samples1) - mean(samples2)
-    difs <- c(difs, dif)
-}
+difs <- conf_1 - conf_2
 
 shapiro.test(difs)
 
@@ -350,6 +333,10 @@ print(paste('Effect Size', eff))
 O tamanho de efeito obtido foi -1.12. Esse  valor indica uma perfeita correlação negativa entre as duas configurações do algoritmo, significando que a diferença entre os dois grupos é maior do que um desvio padrão. Pode-se entender que quanto maior o tamanho do efeito, maior é o impacto que a variável central do experimento está causando e mais importante se torna o fato dela ter uma contribuição para a questão analisada [@Lindenau].
   
 Considerando o p-valor do teste pareado de Wilcoxon, temos que as amostras da configuração 1 e 2 demonstraram diferença no desempenho dos algoritmos. Assim podemos refutar nossa hipótese nula de que a diferença das médias é igual a zero.
+
+```{r}
+durbinWatsonTest(as.vector(conf_1-conf_2))
+```
 
 
 ### Discussão para Melhoria do Experimento 
