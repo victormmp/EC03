@@ -87,7 +87,7 @@ suppressPackageStartupMessages(library(CAISEr))
 ```
 ## Resumo
 
-O objetivo deste estudo de caso é investigar como modificações de hiperparâmetros de um algoritmo de otimização baseado em evolução diferencial influenciam em seu desempenho, em diferentes cenários de execução. Os algoritmose serão testados  partir de funções de Rosenbrock, de dimensões entre 2 e 150. 
+O objetivo deste estudo de caso é investigar como modificações de hiperparâmetros de um algoritmo de otimização baseado em evolução diferencial influenciam em seu desempenho, em diferentes cenários de execução. Os algoritmos serão testados a partir de funções de Rosenbrock, de dimensões entre 2 e 150. 
 
 ## Papéis Desempenhados
 
@@ -103,7 +103,7 @@ A divisão de tarefas no grupo segue a descrição da *Declaração de Política
 
 ### Descrição do Problema
 
-O problema analisado tem por objetivo comparar o desempenho de duas configurações de um algoritmo de otimização baseada em evolução diferencial, na resolução do problema de ótimo em funções de Rosenbrook. As funções podem possuir dimensões que variam entre 2 e 150. A hipótese nula é a de que o desempenho dos dois algoritmos permanece o mesma independente da configuração, e a hipótese que está sendo testada é a de que existe uma diferenção de desempenho entre elas.
+O problema analisado tem por objetivo comparar o desempenho de duas configurações de um algoritmo de otimização baseada em evolução diferencial, na resolução do problema de otimização da função de Rosenbrock. As funções podem possuir dimensões que variam entre 2 e 150. A hipótese nula é a de que o desempenho dos dois algoritmos permanece o mesma independente da configuração, e a hipótese que está sendo testada é a de que existe uma diferenção de desempenho entre elas.
 
 Para avaliar o desempenho de cada um dos algoritmos, seus desempenhos sob diferentes dimensões da função de Rosenbrook são levados em consideração, a partir de testes pareados. Testes pareados constituem uma parte de testes blocados, onde distribuições são comparadas caso a caso, agrupadas em blocos, com o objetivo de diminuir efeitos que não estejam relacionados com os parâmetros em teste. O valor de performance $y$ para cara algoritmo $i$ em cada instância $j$ é dado a partir da fórmula [@Montgomery2012]:
 
@@ -148,7 +148,7 @@ $$
 
 ### Execução do Experimento
 
-Como deseja-se avaliar o desempenho das duas configurações de algoritmos sob diferentes dimensões de problema, serão realizados testes pareados. Cada observação do teste corresponde a uma dimensão do problema de Rosenbrook. Considerando as métricas para o teste estabelecidas anteriormente, o número de instâncias para o teste pareado deverá ser, no  mínimo, 34 amostras, como o cálculo a seguir demonstra.
+Como deseja-se avaliar o desempenho das duas configurações de algoritmos sob diferentes dimensões de problema, serão realizados testes pareados. Cada observação do teste corresponde a uma dimensão do problema de Rosenbrock. Considerando as métricas para o teste estabelecidas anteriormente, o número de instâncias para o teste pareado deverá ser, no  mínimo, 34 amostras, como o cálculo a seguir demonstra.
 
 ```{r num_amostras, echo=TRUE}
 result <- power.t.test(delta=0.5,
@@ -163,7 +163,7 @@ print(result)
 
 ## Coleta dos Dados
 
-Como, a princípio, não podemos assumir normalidade dos dados coletados, para saber a quantidade de instâncias a ser utilizada, fizemos o cálculo considerando o uso do teste de Wilcoxon [@Wilcox], utilizando a função `calc_instances` [@Campelo].
+A princípio, não podemos assumir normalidade dos dados coletados, para saber a quantidade de instâncias a ser utilizada, então, fizemos o cálculo considerando o uso do teste de Wilcoxon [@Wilcox], utilizando a função `calc_instances` [@Campelo].
 
 ```{r numero_de_instancias, eval=T, echo=T}
 Ncalc <- calc_instances(
@@ -246,7 +246,7 @@ write.csv(out_dim.conf1, 'conf_1.csv', row.names=FALSE)
 write.csv(out_dim.conf2, 'conf_2.csv', row.names=FALSE)
 ```
 
-Ao final, temos um conjunto com 45 instâncias correspondentes a ordens do algoritmo de Rosenbrook, com 30 amostras em cada um.
+Ao final, temos um conjunto com 45 instâncias correspondentes a ordens do algoritmo de Rosenbrock, com 30 amostras em cada um.
 
 ## Análise Exploratória dos Dados
 
@@ -307,13 +307,18 @@ shapiro.test(difs)
 
 ```
 
+```{r plot, echo=F, fig=T, fig.align='center', fig.cap='Q-Q plot.', fig.pos="H"}
+qqPlot(difs)
+```
 De acordo com o teste de Shapiro-Wilk, o p-valor para a diferença foi de $0.006$, abaixo da incerteza de 0.05, o que é um indício de que a distribuição dos dados não é normal. 
+
+
+```{r boxplot, echo=F, fig=T, fig.align='center', fig.cap='Boxplot para as diferenças das médias.', fig.pos="H"}
+boxplot(difs)
+```
 
 O boxplot para as diferenças, como pode ser visto a seguir, mostra que existe uma assimetria nos dados, o que corrobora com a hipótese de não-normalidade. A partir da análise do diagrama, nota-se que os valores são negativos. Assim, essa disposição pode levar à conclusão da existência de uma diferença de desempenho entre as duas configurações. Entretanto, não é suficiente para inferir com confiança sobre a população.
 
-```{r boxplot, echo=F, fig=T, fig.align='center', fig.cap='Box plot para as diferenças das médias.'}
-boxplot(difs)
-```
 
 ### Teste de Hipótese
 
@@ -332,6 +337,7 @@ O intervalo de confiança (intervalo com probabilidade de 95% de conter o valor 
   - Graus de Liberdade = 44
   - p-valor = 5.684 e-14
   - Intervalo de confiança = -5993713 a -3620723
+  - Tamanho de efeito é -1.12.
   
 O cálculo do tamanho de efeito é calculado de acordo com o trecho de código abaixo:
 
@@ -342,20 +348,12 @@ print(paste('Effect Size', eff))
 ```
 
 O tamanho de efeito obtido foi -1.12. Esse  valor indica uma perfeita correlação negativa entre as duas configurações do algoritmo, significando que a diferença entre os dois grupos é maior do que um desvio padrão. Pode-se entender que quanto maior o tamanho do efeito, maior é o impacto que a variável central do experimento está causando e mais importante se torna o fato dela ter uma contribuição para a questão analisada [@Lindenau].
-
-Compilando o teste de hipótese de Wilcoxon obtemos os seguintes resultados:
-
-
-  - Graus de Liberdade = 44
-  - p-valor = 5.684 e-14
-  - Intervalo de confiança = -5993713 a -3620723
-  - Tamanho de efeito é -1.12.
   
 Considerando o p-valor do teste pareado de Wilcoxon, temos que as amostras da configuração 1 e 2 demonstraram diferença no desempenho dos algoritmos. Assim podemos refutar nossa hipótese nula de que a diferença das médias é igual a zero.
 
 
 ### Discussão para Melhoria do Experimento 
-Para uma melhoria de resultados, propõe-se o uso da herística citada em [@FCampelo_artigo]. Porém esse método exigiria uma custo computacional muito alto, mostrando-se inviável para o equipamento utilizado para geração dos dados analisados no presente relátorio. 
+Para uma melhoria de resultados, propõe-se o uso da herística citada em [@Campelo]. Porém esse método exigiria uma custo computacional muito alto, mostrando-se inviável para o equipamento utilizado para geração dos dados analisados no presente relátorio. 
 
 
 ## Conclusões
