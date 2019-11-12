@@ -317,7 +317,7 @@ boxplot(difs)
 
 ### Teste de Hipótese
 
-Como visto, não se consegue negar a hipótese nula de que os dados vieram de uma distribuição normal, o que indica grande possibilidade de que os dados sejam normais. Pode-se, portanto, realizar um teste pareado com as médias dos dados obtidos a cada instância, usando teste de Wilcoxon [@Wilcox].
+Como visto, podemos refutar a hipótese nula de que os dados não vieram de uma distribuição normal. Pode-se, portanto, realizar um teste pareado com as médias dos dados obtidos para cada instância, usando o teste de Wilcoxon [@Wilcox].
 
 ```{r teste_t, echo=T, eval=T}
 result <- wilcox.test(difs, alternative='two.sided', conf.level=0.95, conf.int=T)
@@ -343,12 +343,24 @@ print(paste('Effect Size', eff))
 
 O tamanho de efeito obtido foi -1.12. Esse  valor indica uma perfeita correlação negativa entre as duas configurações do algoritmo, significando que a diferença entre os dois grupos é maior do que um desvio padrão. Pode-se entender que quanto maior o tamanho do efeito, maior é o impacto que a variável central do experimento está causando e mais importante se torna o fato dela ter uma contribuição para a questão analisada [@Lindenau].
 
+Compilando o teste de hipótese de Wilcoxon obtemos os seguintes resultados:
+
+
+  - Graus de Liberdade = 44
+  - p-valor = 5.684 e-14
+  - Intervalo de confiança = -5993713 a -3620723
+  - Tamanho de efeito é -1.12.
+  
+Considerando o p-valor do teste pareado de Wilcoxon, temos que as amostras da configuração 1 e 2 demonstraram diferença no desempenho dos algoritmos. Assim podemos refutar nossa hipótese nula de que a diferença das médias é igual a zero.
+
 
 ### Discussão para Melhoria do Experimento 
+Para uma melhoria de resultados, propõe-se o uso da herística citada em [@FCampelo_artigo]. Porém esse método exigiria uma custo computacional muito alto, mostrando-se inviável para o equipamento utilizado para geração dos dados analisados no presente relátorio. 
 
 
 ## Conclusões
 
+A principal conclusão que podemos tirar a respeito deste teste é que a configuração 1 possui melhor desempenho que a configuração 2, vista no boxplot anteriormente, uma vez que a distribuição dos dados entre a diferença das médias(Configuração2-Configuração1) é negativa. Tal conclusão apresentou uma confiança de 95%. 
 
 ## Referências
 
