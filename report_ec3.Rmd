@@ -7,7 +7,13 @@ output:
     fig_caption: yes
   html_document:
     df_print: paged
+header-includes:
+ \usepackage{float}
 ---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.pos = 'H')
+```
 
 ```{r setup,results='hide',warning=FALSE,echo=FALSE, include=FALSE}
 # A few initial definitions just to make sure all required packages are installed. Change as needed.
@@ -172,7 +178,7 @@ Ncalc <- calc_instances(
     sig.level=0.05,
     alternative.side='two.sided',
     test='wilcoxon',
-    ncomparisons=1
+    ncomparisons=2
 )
 print(Ncalc$ninstances)
 ```
@@ -290,13 +296,13 @@ shapiro.test(difs)
 
 ```
 
-```{r plot, echo=F, fig=T, fig.align='center', fig.cap='Q-Q plot.', fig.pos="H"}
+```{r plot, echo=F, fig=T, fig.align='center', fig.cap='Q-Q plot.'}
 qqPlot(difs)
 ```
-De acordo com o teste de Shapiro-Wilk, o p-valor para a diferença foi de $0.006$, abaixo da incerteza de 0.05, o que é um indício de que a distribuição dos dados não é normal. 
+De acordo com o teste de Shapiro-Wilk, o p-valor para a diferença foi de $0.007$, abaixo da incerteza de 0.05, o que é um indício de que a distribuição dos dados não é normal. Pode-se confirmar a não normalidade por meio do Q-Q plot. 
 
 
-```{r boxplot, echo=F, fig=T, fig.align='center', fig.cap='Boxplot para as diferenças das médias.', fig.pos="H"}
+```{r boxplot, echo=F, fig=T, fig.align='center', fig.cap='Boxplot para as diferenças das médias.'}
 boxplot(difs)
 ```
 
