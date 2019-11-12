@@ -317,7 +317,7 @@ boxplot(difs)
 
 ### Teste de Hipótese
 
-Como visto, não se consegue negar a hipótese nula de que os dados vieram de uma distribuição normal, o que indica grande possibilidade de que os dados sejam normais. Pode-se, portanto, realizar um teste pareado com as médias dos dados obtidos a cada instância, usando teste de Wilcoxon [@Wilcox].
+Como visto, podemos refutar a hipótese nula de que os dados não vieram de uma distribuição normal. Pode-se, portanto, realizar um teste pareado com as médias dos dados obtidos para cada instância, usando o teste de Wilcoxon [@Wilcox].
 
 ```{r teste_t, echo=T, eval=T}
 result <- wilcox.test(difs, alternative='two.sided', conf.level=0.95, conf.int=T)
@@ -329,13 +329,16 @@ eff <- z/sqrt(45)
 print(paste('Effect Size', eff))
 ```
 
-E o tamanho de efeito é -1.12.
+Compilando o teste de hipótese de Wilcoxon obtemos os seguintes resultados:
 
-Os resultados obtidos pelo teste, portanto, foram:
 
   - Graus de Liberdade = 44
   - p-valor = 5.684 e-14
   - Intervalo de confiança = -5993713 a -3620723
+  - Tamanho de efeito é -1.12.
+  
+Considerando o p-valor do teste pareado de Wilcoxon, temos que as amostras da configuração 1 e 2 demonstraram diferença no desempenho dos algoritmos. Assim podemos refutar nossa hipótese nula de que a diferença das médias é igual a zero.
+
 
 ### Discussão para Melhoria do Experimento 
 
