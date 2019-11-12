@@ -341,10 +341,12 @@ Considerando o p-valor do teste pareado de Wilcoxon, temos que as amostras da co
 
 
 ### Discussão para Melhoria do Experimento 
+Para uma melhoria de resultados, propõe-se o uso da herística citada em [@FCampelo_artigo]. Porém esse método exigiria uma custo computacional muito alto, mostrando-se inviável para o equipamento utilizado para geração dos dados analisados no presente relátorio. 
 
 
 ## Conclusões
 
+A principal conclusão que podemos tirar a respeito deste teste é que a configuração 1 possui melhor desempenho que a configuração 2, vista no boxplot anteriormente, uma vez que a distribuição dos dados entre a diferença das médias(Configuração2-Configuração1) é negativa. Tal conclusão apresentou uma confiança de 95%. 
 
 ## Referências
 
